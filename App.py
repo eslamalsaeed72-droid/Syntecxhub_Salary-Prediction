@@ -1,4 +1,4 @@
-# app.py: Enhanced Streamlit application for salary prediction with visualizations
+# app.py: Updated Streamlit application with improved heatmap readability
 
 import streamlit as st
 import joblib
@@ -65,7 +65,7 @@ if st.button('Predict Salary', type="primary"):
     ax1.set_xlabel('Coefficient Value (Salary Increase per Unit)')
     st.pyplot(fig1)
 
-    # Visualization 2: Effect of varying experience (fixing other scores)
+    # Visualization 2: Salary trend by experience
     st.markdown("### Salary Trend by Experience")
     exp_range = np.arange(0, 16, 1)
     salary_by_exp = []
@@ -88,10 +88,13 @@ if st.button('Predict Salary', type="primary"):
     ax2.legend()
     st.pyplot(fig2)
 
-    # Visualization 3: 3D surface or heatmap alternative - Salary by Test & Interview Score
+    # Visualization 3: Improved Salary Heatmap (coarser grid + no annotations + larger figure)
     st.markdown("### Salary Heatmap: Test Score vs Interview Score")
-    test_range = np.linspace(0, 10, 21)
-    interview_range = np.linspace(0, 10, 21)
+    st.write(f"Predicted salary values for different combinations (Experience fixed at **{experience}** years)")
+
+    # Use a coarser grid to avoid overcrowding (11x11 instead of 21x21)
+    test_range = np.linspace(0, 10, 11)
+    interview_range = np.linspace(0, 10, 11)
     salary_grid = np.zeros((len(test_range), len(interview_range)))
     
     for i, ts in enumerate(test_range):
@@ -103,12 +106,28 @@ if st.button('Predict Salary', type="primary"):
             })
             salary_grid[i, j] = model.predict(temp_input)[0]
     
-    fig3, ax3 = plt.subplots(figsize=(10, 7))
-    sns.heatmap(salary_grid, xticklabels=np.round(interview_range, 1), yticklabels=np.round(test_range, 1),
-                annot=True, fmt=".0f", cmap="YlGnBu", ax=ax3, cbar_kws={'label': 'Predicted Salary ($)'})
-    ax3.set_title(f'Predicted Salary Heatmap (Fixed Experience = {experience} years)')
-    ax3.set_xlabel('Interview Score')
-    ax3.set_ylabel('Test Score')
+    # Create larger figure for better readability
+    fig3, ax3 = plt.subplots(figsize=(12, 8))
+    sns.heatmap(
+        salary_grid,
+        xticklabels=np.round(interview_range, 1),
+        yticklabels=np.round(test_range, 1),
+        annot=False,                     # Remove annotations to eliminate overlap
+        cmap="YlGnBu",
+        linewidths=0.5,                  # Add grid lines for clarity
+        linecolor='gray',
+        cbar_kws={'label': 'Predicted Salary ($)', 'shrink': 0.8},
+        ax=ax3
+    )
+    
+    ax3.set_title(f'Predicted Salary Heatmap (Experience = {experience} years)')
+    ax3.set_xlabel('Interview Score (out of 10)')
+    ax3.set_ylabel('Test Score (out of 10)')
+    
+    # Improve tick label readability
+    plt.xticks(rotation=0)
+    plt.yticks(rotation=0)
+    
     st.pyplot(fig3)
 
 # Footer
