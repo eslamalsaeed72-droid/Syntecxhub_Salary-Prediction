@@ -57,14 +57,13 @@ streamlit
 ## Usage Instructions
 
 ### Running the Notebook
-1. Open `notebook.ipynb` in Jupyter Notebook or Google Colab.
+1. Open `Syntecxhub_Salary Prediction..ipynb` in Jupyter Notebook or Google Colab.
 2. Execute cells sequentially to perform EDA, train models, and save the best model.
 
 ### Running the Streamlit App Locally
 ```bash
 streamlit run app.py
 ```
-- Access the app at `http://localhost:8501`.
 - Use sliders to input values and predict salary.
 
 ### Deployment
@@ -99,3 +98,4 @@ Contributions are welcome. Please submit pull requests or open issues for sugges
 ## Contact
 
 For questions or collaboration, reach out via GitHub issues.
+email:eslamalsaeed72@gmail.com
